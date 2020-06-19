@@ -11,7 +11,7 @@ It is recommended that you first look at [basic demo](https://github.com/mesibo/
 - Live Streaming
 - Screen Sharing
 - Fine control over all video & audio parameters and user permissions
-- Supports video streaming at various resolutions: Standard, HD, FHD, UHD, and 4K
+- Supports video streaming at various resolutions: Standard, HD, FHD and 4K
 - Group Chat
 - One-to-One chat
 - Invite Participants
