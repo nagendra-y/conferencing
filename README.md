@@ -12,7 +12,7 @@ This folder contains the source code for the mesibo sample conferencing app host
 - Live Streaming
 - Screen Sharing
 - Fine control over all video & audio parameters and user permissions
-- Supports video streaming at various resolutions: Standard, HD, FHD, and 4K
+- Supports video streaming at various resolutions: Standard, HD, FHD and 4K
 - Group Chat
 - One-to-One chat
 - Invite Participants
