@@ -1,25 +1,24 @@
+const DEMO_GROUP_ID = 104661;
+const DEMO_GROUP_NAME = "Basic";
 
-const DEMO_GROUP_ID = 0000;
-const DEMO_GROUP_NAME = "xxxx";
+const MESIBO_APP_ID = 'web';
 
-const MESIBO_APP_ID = 'xxxx';
-
-var demo users = [
+var demo_users = [ 
     {
-     'token' : 'TOKEN_USER_0'
-     ,'address'  : 'ADDRESS_USER_0'
+     'token' : 'a09534bb7e799932e97cc4107110df90c6d6a1c3a020b28ebb166bf1'
+     ,'address'  : 'live_demo_0'
      ,'name'    : 'User-0' 
     },
 
     {
-     'token' : 'TOKEN_USER_1'
-     ,'address'  : 'ADDRESS_USER_1'
+     'token' : '4d499ca96c9b8f953e7e36a4263412ce5ee6aa302560cadce11166bf3'
+     ,'address'  : 'live_demo_1'
      ,'name'    : 'User-1' 
     },
 
     {
-     'token' : 'TOKEN_USER_2'
-     ,'address'  : 'ADDRESS_USER_2'
+     'token' : 'a2a403cd731fd305cb71d2af1ef078d85fe4a00adf2c9ed439e11135d90'
+     ,'address'  : 'live_demo_2'
      ,'name'    : 'User-2' 
     },
 
@@ -115,11 +114,15 @@ function login(user_index){
 	//Create group call object
 	var live = api.initGroupCall();
 	console.log(live);
+	if(!DEMO_GROUP_ID){
+		alert('Invalid group id');
+		return;
+	}
 	live.setRoom(DEMO_GROUP_ID);
 
 	// Create a local participant, Set Publisher name and address
 	console.log('====>create participant', selected_user.name, selected_user.address);
-	publisher = live.getLocalParticipant(selected_user.name, selected_user.address);
+	publisher = live.getLocalParticipant(0, selected_user.name, selected_user.address);
 
 
 	document.getElementById("conference-area").style.display = 'flex';
@@ -132,15 +135,12 @@ function streamFromCamera() {
 	console.log('streamFromCamera');
 
 	var o = {};
-	o.name = DEMO_GROUP_NAME;
-	o.groupid = DEMO_GROUP_ID;
-	o.source = STREAM_CAMERA;
-	o.video = true;
+	o.video = false;
 	o.audio = true;
 
 	console.log('local publisher', o, publisher, publisher.getName(), publisher.getId());
 
-	publisher.call(o, "video-publisher", on_stream, on_status);
+	var rv = publisher.call(o, "video-publisher", on_stream, on_status);
 }
 
 function streamFromScreen() {
@@ -240,8 +240,8 @@ function on_stream(p) {
 }
 
 
-function on_status(p, status, video){
-	console.log('on_status', p.getId(), p.getName(), 'local?', p.isLocal(), ' status: 0x'+status.toString(16), video);
+function on_status(p, status){
+	console.log('on_status', p.getId(), p.getName(), 'local?', p.isLocal(), ' status: 0x'+status.toString(16));
 
 
 	if(MESIBO_CALLSTATUS_CHANNELUP == status){
