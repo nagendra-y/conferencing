@@ -135,7 +135,7 @@ function streamFromCamera() {
 	console.log('streamFromCamera');
 
 	var o = {};
-	o.video = false;
+	o.video = true;
 	o.audio = true;
 
 	console.log('local publisher', o, publisher, publisher.getName(), publisher.getId());
