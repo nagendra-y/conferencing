@@ -38,7 +38,7 @@
  *
  *
  */
-const MESIBO_APP_ID = 'com.example.mesiboconf';
+const MESIBO_APP_ID = 'live';
 
 /* If you are hosting Mesibo backend on your own server, change this accordingly.
  * Refer https://github.com/mesibo/conferencing/tree/master/live-demo/backend 

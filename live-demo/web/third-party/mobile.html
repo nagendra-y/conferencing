@@ -61,7 +61,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navOptions" style="position: absolute;z-index: 1; top: 3rem; background-color: #f8f9fa!important; width: 100%; font-size: 30px;">
+  <div class="collapse navbar-collapse" id="navOptions" style="position: absolute;z-index: 1; top: 3rem; background-color: #f8f9fa!important; width: 100%">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" ng-click="toggleActiveSpeakerMode()" style="border: 1px solid grey">
         <i class="fa fa-bullhorn" style="width: 50px; padding-left: 5px; color: black" aria-hidden="true"  ng-style ="{'color': in_active_speaker_mode? '#FA8072':' default'}"></i><span style="color: black">Active Speaker Mode</span>
@@ -202,7 +202,7 @@
         <div class="row h-50 stream-thumbnail-block" style="background-color: #787878" id="focus-area">
           
           <div  class="mx-auto" style="text-align: center;" id="video-publisher-container">
-            <video class="centered" id="video-publisher"; autoplay playsinline width="100%"  height="100%" />
+            <video class="centered" id="video-publisher"; autoplay playsinline muted width="100%"  height="100%" />
           </div>
 
           <div class="mx-auto" style="top:70px; left: 3px; position:absolute;color: white; text-align: left; font-size: 15px;"><div ng-show="getStreamName(focused_stream)" style="background-color: hsl(0, 0%, 0%, 0.4); display: inline;">                                      
@@ -225,7 +225,7 @@
             </div>
           </div>
           
-          <div class="mobile-stream-options" style="z-index: 999; top:70px; right:2px; position: absolute; background-color: hsl(0, 0%, 0%, 0.4);width: 40px; font-size: 20px; text-align: center;">
+          <div class="stream-options"  style="z-index: 999; top:70px; right:2px; position: absolute; background-color: hsl(0, 0%, 0%, 0.4); width: 40px; font-size: 20px; text-align: center;">
             <a href="#" style="color: white; display: block;"><i ng-class="getAudioStatusClass(focused_stream)" ng-click="focused_stream.toggleMute(false);" ng-attr-title="{{ focused_stream.muteStatus(false, false) == false ? 'Mute Audio': 'Unmute Audio'}}" ></i></a>
             <a href="#" style="color: white;display: block;" ><i ng-class="getVideoStatusClass(focused_stream)" ng-click="focused_stream.toggleMute(true);" ng-attr-title="{{ focused_stream.muteStatus(true, false) == false ? 'Mute Video': 'Unmute Video'}}"></i></a>
             <a href="#" style="color: white;display: block;" ><i class="fas fa-expand" ng-click="openFullscreen('video-publisher', getStreamId(focused_stream), focused_stream)" title="Full Screen"></i></a>
@@ -235,31 +235,8 @@
 
         <div class="container-fluid pl-0 pr-0" id="streams-area" style="background-color: white; width: 100%; overflow-y: scroll;" ng-show = "streams.length">
             <div ng-repeat="s in streams track by $index" ng-if="streams[$index]" ng-show="s!=focused_stream" ng-click="focusStream(s, true)" class="row pl-0 pr-0" style="background-color: #787878; border: 1px solid #ccc" on-finish-render="onStreamsRendered" id="stream-container-{{getStreamId(s)}}">
-              <div class="col-4 pl-0 pr-0" style="background-color: #787878">                
+              <div class="col-4 pl-0 pr-0" style="background-color: #787878">
                 <div  style="text-align: center; margin: auto" id="video-container-{{getStreamId(streams[$index])}}" >
-
-                <div class="mx-auto" style="top:0; position:absolute;color: white; text-align:left; left: 20px;z-index: 100; font-size: 20px;" >                                                        
-                  <div>
-                    <i style="color:  #98FB98;background-color: hsl(0, 0%, 0%, 0.4); cursor: default; padding-left: 5px" class="fas fa-bullhorn"  ng-style="{'display': streams[$index].isTalking() ?'inline-block':'none'}" title="Talking..."></i>
-                    <i style="color:  #FF6347; background-color: hsl(0, 0%, 0%, 0.4); cursor: default;padding-left: 5px" class="fas fa-microphone-slash"  ng-style="{'display': (streams[$index]!=publisher && streams[$index].muteStatus(false, true))||(streams[$index]==publisher && streams[$index].muteStatus(false, false)) ?'inline-block':'none'}" title="Remote Audio Muted"></i>
-                  </div>                                       
-                </div>
-                
-                <div class="text-center" style="position:absolute;left:0; right:0;top:40%; bottom:0;margin:auto; display: none" ng-style="{'display': streams[$index].isConnected ?'none':'block'}">
-                  <div class="spinner-border text-light" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
-              
-
-                <div style="position:absolute;left:20%; right:0;top:40%; bottom:0;margin:auto;">
-                  <div>                                        
-                    <i style="color: #FF6347; display: none; font-size: 20px; cursor: pointer; display: none;" class="fas fa-video-slash" ng-style="{'display':(streams[$index]!=publisher && streams[$index].muteStatus(true, true)) || ((streams[$index]==publisher && streams[$index].muteStatus(true, false))) ?'block':'none'}"  title="Remote Video Muted"></i>
-                  </div>
-                </div>
-
-                                      
-
                   <video class="centered" ng-style ="{'object-fit': isHorizontal(s)? 'cover':'contain'}" id="video-{{getStreamId(streams[$index])}}"  width= "100%" height ="100%" autoplay playsinline />
                 </div>  
               </div>

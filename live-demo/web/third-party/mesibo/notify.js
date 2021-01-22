@@ -1,4 +1,4 @@
-// config.js
+//notify.js
 
 /** Copyright (c) 2019 Mesibo
  * https://mesibo.com
@@ -36,33 +36,53 @@
  * Documentation
  * https://mesibo.com/documentation/
  *
+ * Source Code Repository
+ * https://github.com/mesibo/conferencing/tree/master/live-demo/web
+ *
  *
  */
-const MESIBO_APP_ID = 'com.example.mesiboconf';
 
-/* If you are hosting Mesibo backend on your own server, change this accordingly.
- * Refer https://github.com/mesibo/conferencing/tree/master/live-demo/backend 
- */
-const MESIBO_API_BACKEND = 'https://app.mesibo.com/conf/api.php';
+/**
+Mesibo invokes various Listeners for various events.
+For example, when you receive a message, receive an incoming call etc
+MesiboNotify is a class of listeners that can be invoked to get real-time notification of events
+**/
 
-/* If you are hosting Mesibo backend on your own server, 
- * use your own captcha token 
- */
-const MESIBO_CAPTCHA_TOKEN = '6LceR_sUAAAAAEfV7LZK2cOaOHRzPSCNEK-_jcfU';
+function MesiboNotify(s) {
+	this.scope = s;
+}
 
-/* File url sources */
-var MESIBO_DOWNLOAD_URL = 'https://appimages.mesibo.com/';
-var MESIBO_UPLOAD_URL = 'https://s3.mesibo.com/api.php';
+// You will receive the connection status here
+MesiboNotify.prototype.Mesibo_OnConnectionStatus = function(status, value) {
+	MesiboLog('MesiboNotify.prototype.Mesibo_OnConnectionStatus: ' + status);
+    // this.scope.OnConnectionStatus(status, value);
 
+};
 
-/* Debug Mode Configuration */
-isDebug = true;// toggle this to turn on / off for global control
-if (isDebug) var MesiboLog = console.log.bind(window.console);
-else var MesiboLog = function() {};
+// You will receive status of sent messages here
+MesiboNotify.prototype.Mesibo_OnMessageStatus = function(m) {
 
-var ErrorLog = console.log.bind(window.console);
-/*ErrorLog(function_name, error_msg)*/
+	MesiboLog('MesiboNotify.prototype.Mesibo_OnMessageStatus: from ' + m.peer +
+		' status: ' + m.status);
+    this.scope.onMessageStatus(m);
+};
 
-const RESULT_FAIL = -1;
-const RESULT_SUCCESS = 0;
+// You will receive messages here
+MesiboNotify.prototype.Mesibo_OnMessage = function(m, data) {
+
+	MesiboLog('MesiboNotify.prototype.Mesibo_OnMessage: from ' + m.peer, ' data ', data);
+	this.scope.onMessage(m, data);
+};
+
+// You will receive calls here
+MesiboNotify.prototype.Mesibo_OnCall = function(callid, from, video) {
+	MesiboLog('Mesibo_OnCall: '+ callid + ' '+ from + ' '+ video);
+    this.scope.onCall(callid, from, data);
+};
+
+// You will receive call status here
+MesiboNotify.prototype.Mesibo_OnCallStatus = function(callid, status) {
+	MesiboLog('Mesibo_onCallStatus: ' + callid + ' ' + status);
+    this.scope.onCallStatus(callid, status);
+};
 

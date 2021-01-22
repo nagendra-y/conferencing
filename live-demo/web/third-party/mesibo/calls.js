@@ -1,4 +1,4 @@
-// config.js
+// calls.js
 
 /** Copyright (c) 2019 Mesibo
  * https://mesibo.com
@@ -36,33 +36,83 @@
  * Documentation
  * https://mesibo.com/documentation/
  *
+ * Source Code Repository
+ * https://github.com/mesibo/conferencing/tree/master/live-demo/web
+ *
  *
  */
-const MESIBO_APP_ID = 'com.example.mesiboconf';
+function MesiboCall(s) {
+	this.scope = s;
+	this.api = {};
+	this.init();
 
-/* If you are hosting Mesibo backend on your own server, change this accordingly.
- * Refer https://github.com/mesibo/conferencing/tree/master/live-demo/backend 
- */
-const MESIBO_API_BACKEND = 'https://app.mesibo.com/conf/api.php';
+}
 
-/* If you are hosting Mesibo backend on your own server, 
- * use your own captcha token 
- */
-const MESIBO_CAPTCHA_TOKEN = '6LceR_sUAAAAAEfV7LZK2cOaOHRzPSCNEK-_jcfU';
+MesiboCall.prototype.init = function() {
+	this.api = this.scope.getMesibo();
+	if (!isValid(this.api)) {
+		MesiboLog('Invalid Mesibo Instance');
+		return -1;
+	}
 
-/* File url sources */
-var MESIBO_DOWNLOAD_URL = 'https://appimages.mesibo.com/';
-var MESIBO_UPLOAD_URL = 'https://s3.mesibo.com/api.php';
+	return this;
+};
 
+MesiboCall.prototype.videoCall = function(peer) {
 
-/* Debug Mode Configuration */
-isDebug = true;// toggle this to turn on / off for global control
-if (isDebug) var MesiboLog = console.log.bind(window.console);
-else var MesiboLog = function() {};
+	// Setup UI elements for video call
+	this.scope.showVideoCall();
+	this.api.setupVideoCall('localVideo', 'remoteVideo', true);
 
-var ErrorLog = console.log.bind(window.console);
-/*ErrorLog(function_name, error_msg)*/
+	//Video Call API
+	this.api.call(peer);
 
-const RESULT_FAIL = -1;
-const RESULT_SUCCESS = 0;
+};
+
+MesiboCall.prototype.voiceCall = function(peer) {
+	MesiboLog('voiceCall');
+
+	// Setup UI elements for audio call
+	this.scope.showVoiceCall();
+	this.api.setupVoiceCall('audioPlayer');
+
+	//Voice Call API
+	this.api.call(peer);
+};
+
+MesiboCall.prototype.answer = function() {
+
+	//Common modal popup notification for a call. Select the required modal to be displayed
+	if (this.scope.is_video_call)
+		this.video_answer();
+	else
+		this.voice_answer();
+
+};
+
+/** Control Modal View **/
+MesiboCall.prototype.hangup = function() {
+	this.scope.hangupCall();
+	this.api.hangup(0);
+};
+
+MesiboCall.prototype.video_answer = function() {
+	this.scope.showVideoCall();
+	this.api.answer(true);
+};
+
+MesiboCall.prototype.video_hangup = function() {
+	this.scope.hangupVideoCall();
+	this.api.hangup(0);
+};
+
+MesiboCall.prototype.voice_answer = function() {
+	this.scope.showVoiceCall();
+	this.api.answer(true);
+};
+
+MesiboCall.prototype.voice_hangup = function() {
+	this.scope.hangupAudioCall();
+	this.api.hangup(0);
+};
 

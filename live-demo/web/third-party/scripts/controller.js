@@ -1,4 +1,4 @@
-/** Copyright (c) 2020 Mesibo
+/** Copyright (c) 2019 Mesibo
  * https://mesibo.com
  * All rights reserved.
  *
@@ -140,7 +140,7 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 	$scope.bottom_strip_hide_timeout = null; //If set, it will hide the bottom strip
 	$scope.show_speaker_preview = {};
 
-	const MIN_HIDE_BOTTOM_STRIP_TIMEOUT = 10000; //Auto hide bottom strip in expnaded mode after 5 seconds
+	const MIN_HIDE_BOTTOM_STRIP_TIMEOUT = 5000; //Auto hide bottom strip in expnaded mode after 5 seconds
 	const MIN_AUTO_GRID_TIMEOUT = 5000; //Return to grid mode if no one talks for 5 seconds 
 
 	$scope.display_names = true;
@@ -629,7 +629,7 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 				$scope.addressBook[p.getAddress()] = p.getName();
 			$scope.subscribe(p);
 
-			playSound('assets/audio/join');
+			//playSound('assets/audio/join');
 
 			MesiboLog(getStreamId(p), p.getId(), p.getType(), p.getName() + ' has entered the room <=========');
 			if(p.getType && p.getType() > 0)
@@ -726,10 +726,8 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 			// Example, consider a webinar scenario. User may expand the screen shared by a speaker
 			// than the speaker's camera stream
 			// override_expanded_mode will be true when user has set it from the UI
-			if($scope.streams.length > 1){
-				MesiboLog("Focus Talking Participant");
-				$scope.expandStream(p, false); //If there are more than one speakers, focus talking speaker
-			}
+			if($scope.streams.length > 1)
+			$scope.expandStream(p, false); //If there are more than one speakers, focus talking speaker
 		}
 
 		return RESULT_SUCCESS;
@@ -822,7 +820,7 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 		if(PLATFORM_IS_MOBILE){
 			MesiboLog($scope.streams.length);
 			MesiboLog('Focus on new joinee');
-			if($scope.streams.length){
+			if($scope.streams.length <= 2){
 				$scope.focusStream(p);
 			}
 		}
@@ -867,6 +865,7 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 			
 			$scope.publisher.hangup();
 		
+			if (rv == false) return;
 			$scope.addTicker('You have hanged up');
 			$scope.publisher.isConnected = false;
 			$scope.publisher.streamOptions = true;
@@ -1119,11 +1118,11 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 			return;
 
 		var focus = $scope.focused_stream;
-		if(!(focus && focus.J))
+		if(!focus)
 			return;		
 
-		var w = focus.J.videoWidth;
-		var h = focus.J.videoHeight;
+		var w = focus.I.videoWidth;
+		var h = focus.I.videoHeight;
 
 		if(!(w && h)){
 			setTimeout(function() { $scope.on_focused_attached(true); }, 50);
@@ -1132,8 +1131,6 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 
 		var ar = w/h;		
 
-		if(!getElementById('focus-area'))
-			return;
 
 		var aWidth = getElementById('focus-area').offsetWidth;
 		// Changes for horizontal mobile. 
@@ -1173,6 +1170,9 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 
 		if(!p)
 			return;
+
+		if($scope.focused_stream === p)
+			return; //Already un focus
 
 		if($scope.focused_stream === $scope.publisher){
 			var sid = $scope.getStreamFromId(getStreamId($scope.focused_stream));
@@ -1532,7 +1532,7 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 				var thumbnail = $scope.streams[i];
 				var sid = getStreamId(thumbnail);
 
-				if( $scope.isBoardMode || !$scope.isExistingPreview(thumbnail) && thumbnail!=$scope.publisher){
+				if( $scope.isBoardMode || !$scope.isExistingPreview(thumbnail)){
 					$scope.thumbnail_streams.push(thumbnail); 
 				}								
 			}
@@ -1905,9 +1905,6 @@ mesiboLive.controller('roomController', ['$scope', '$window', '$compile', '$time
 		if (!selected_stream) {
 			return RESULT_FAIL;
 		}
-
-		if($scope.ultra_expanded_video_selected)
-			return;
 
 
 		if(user_override){
@@ -2605,8 +2602,6 @@ $scope.openFullscreen = function(video_elem, stream_uid, stream) {
 	}
 
 	$scope.ultra_expanded_video_selected = stream;
-	
-	MesiboLog("ultra expand");
 
 	var elem_id = video_elem + stream_uid;
 	if(video_elem == 'video-publisher'){
@@ -2618,8 +2613,7 @@ $scope.openFullscreen = function(video_elem, stream_uid, stream) {
 		MesiboLog('openFullscreen', 'element does not exist');
 		return -1;
 	}
-	
-	MesiboLog("Request Full Screen");
+
 	if (elem.requestFullscreen) {
 		elem.requestFullscreen();
 	} else if (elem.mozRequestFullScreen) { /* Firefox */

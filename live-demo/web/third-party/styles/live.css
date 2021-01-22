@@ -69,10 +69,6 @@
 	display: block;
 }
 
-.stream-thumbnail-block:hover .mobile-stream-options {
-  display: block;
-}
-
 .stream-thumbnail-block-selected .stream-options {
 	display: block;
 }
@@ -90,11 +86,6 @@
   font-size:1.1em;
   /*transition: 0.2s;*/
   color: #00bfc6;
-}
-
-.mobile-stream-options{
-  color: white;
-  display: none;
 }
 
 .speaker-preview-options {
@@ -375,7 +366,3 @@ input[type=number] {
 video::-webkit-media-controls {
   display:none !important;
 }
-
-
-
-

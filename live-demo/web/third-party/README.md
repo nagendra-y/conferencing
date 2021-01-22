@@ -12,7 +12,6 @@ It is recommended that you first look at [basic demo](https://github.com/mesibo/
 - Screen Sharing
 - Fine control over all video & audio parameters and user permissions
 - Supports video streaming at various resolutions: Standard, HD, FHD and 4K
-- Collaborative Whiteboard
 - Group Chat
 - One-to-One chat
 - Invite Participants

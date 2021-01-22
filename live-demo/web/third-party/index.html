@@ -581,7 +581,7 @@
                       <div class="row no-gutters flex-nowrap mx-auto" style="max-width: 100%; overflow-y: hidden; overflow-x: hidden;" id="stream_list_horizontal">                                            
 
                         <div class="strip-thumbnail stream-thumbnail-block col-3" style="max-width: 184px;" 
-                        ng-repeat="thumbnail in thumbnail_streams" ng-show="thumbnail && thumbnail != expanded_video_selected && thumbnai!=publisher" ng-click="grid_mode==1 || (expanded_video_selected == thumbnail) ? '' : expandStream(thumbnail, true)" id="parent-video-small-{{getStreamId(thumbnail)}}" on-finish-render="onStripRendered" >
+                        ng-repeat="thumbnail in thumbnail_streams" ng-show="thumbnail && thumbnail != expanded_video_selected " ng-click="grid_mode==1 || (expanded_video_selected == thumbnail) ? '' : expandStream(thumbnail, true)" id="parent-video-small-{{getStreamId(thumbnail)}}" on-finish-render="onStripRendered" >
                           <div style="text-align: center;">
                             <div class="panel panel-default">
                                <div class="mx-auto" style="top:0; position:absolute;color: white; text-align: center; font-size: 15px">
